@@ -26,25 +26,20 @@
     <meta property="og:description" content="Professional e-commerce and order management portal with customer storefront and secure multi-tier admin panel." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <script type="module" crossorigin src="/raja-imported-items/assets/index-CUBDkc1c.js"></script>
-    <link rel="stylesheet" crossorigin href="/raja-imported-items/assets/index-Zel4kMn1.css">
+    <script type="module" crossorigin src="/raja-imported-items/assets/index-CwmBTIvn.js"></script>
+    <link rel="stylesheet" crossorigin href="/raja-imported-items/assets/index-lcncAdMA.css">
   </head>
   <body class="bg-zinc-950 text-zinc-100 antialiased">
     <div id="root"></div>
     <script>
       // Register Service Worker for PWA installation
-      // Uses relative path so it works under the /raja-one-stop-shop/ base path.
-      // Also checks for updates on every page load — when a new version is found,
-      // it activates immediately so users always get the latest app without clearing cache.
       if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('./sw.js')
             .then(function(reg) {
               console.log('PWA ServiceWorker registered with scope:', reg.scope);
-              // Check for a new SW version now and periodically
               if (reg.update) { try { reg.update(); } catch (e) {} }
               setInterval(function() { try { reg.update(); } catch (e) {} }, 60 * 60 * 1000);
-              // When a new SW takes over, reload once to get fresh assets
               var reloaded = false;
               navigator.serviceWorker.addEventListener('controllerchange', function() {
                 if (!reloaded) { reloaded = true; window.location.reload(); }

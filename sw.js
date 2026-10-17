@@ -1,7 +1,5 @@
 // Service Worker for Raja One Stop Shop PWA
-// 202610171712 is replaced with a unique build timestamp at deploy time,
-// so every deploy gets a fresh cache and users NEVER need to clear cache manually.
-const CACHE_NAME = 'raja-store-pwa-202610171723';
+const CACHE_NAME = 'raja-store-pwa-202610171836';
 const BASE = '/raja-imported-items';
 const PRECACHE_ASSETS = [
   BASE + '/',
@@ -23,7 +21,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate event - delete ALL old caches (any version), then claim clients
+// Activate event - cleanup stale caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -38,8 +36,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - Network-first with cache fallback.
-// HTML navigations ALWAYS try network first (no stale app shell).
+// Fetch event - Network-first with cache fallback
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
@@ -50,18 +47,11 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Never cache Firestore / Firebase / Google API calls
-  if (url.hostname.includes('firestore.googleapis.com') ||
-      url.hostname.includes('firebaseio.com') ||
-      url.hostname.includes('googleapis.com')) {
-    return;
-  }
-
   event.respondWith(
     fetch(event.request)
       .then(networkResponse => {
-        // Cache successful same-origin GET responses for offline use
-        if (networkResponse && networkResponse.status === 200 && url.origin === self.location.origin) {
+        // Cache successful responses for offline use
+        if (networkResponse && networkResponse.status === 200) {
           const responseToCache = networkResponse.clone();
           caches.open(CACHE_NAME).then(cache => {
             cache.put(event.request, responseToCache);
