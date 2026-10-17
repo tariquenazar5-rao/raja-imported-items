@@ -1,8 +1,8 @@
 // Service Worker for Raja One Stop Shop PWA
 // 202610171712 is replaced with a unique build timestamp at deploy time,
 // so every deploy gets a fresh cache and users NEVER need to clear cache manually.
-const CACHE_NAME = 'raja-store-pwa-202610171712';
-const BASE = '/raja-one-stop-shop';
+const CACHE_NAME = 'raja-store-pwa-202610171718';
+const BASE = '/raja-imported-items';
 const PRECACHE_ASSETS = [
   BASE + '/',
   BASE + '/index.html',
