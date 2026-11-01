@@ -112,3 +112,57 @@ body{background:#FAF5EA !important}
   .rj-prods{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible}
   .rj-card{flex:none}
 }
+
+/* ============================================================
+   WHITE-TEXT READABILITY FIX (2026-11-01, owner request)
+   The bundle's literal white text (.text-white and the pale
+   .text-slate-200 / .text-cyan-300 tier accents) sat on the
+   light theme's ivory/white surfaces and could not be read —
+   in the storefront AND the admin panel. Per the owner's
+   order it now renders DARK SKY BLUE (#0369A1, sky-700).
+   The bundle defines NO text-white/opacity variants, no
+   text-zinc-50 and no white placeholders (placeholder-zinc-500
+   already flips to a readable tone), so .text-white +
+   .hover:text-white are the whole white-text surface.
+   ============================================================ */
+.text-white{color:#0369A1 !important}
+.hover\:text-white:hover{color:#0369A1 !important}
+.text-slate-200{color:#0369A1 !important}
+.text-cyan-300{color:#0369A1 !important}
+
+/* KEEP WHITE — the element itself carries a solid coloured
+   background, where white is the readable colour (verified
+   class-by-class against the bundle): emerald WhatsApp/order
+   buttons incl. the floating button, gold amber buttons,
+   sky share button, red DEAL badge, rose % OFF badges,
+   black TikTok button, brand social buttons (Facebook /
+   WhatsApp / Telegram hex), and coloured-gradient buttons
+   (emerald/teal payment + join, red admin-lock, gold medal).
+   NOTE: zinc backgrounds are NOT excepted — the light theme
+   flips every zinc surface light, so zinc-button text takes
+   the sky rule above and stays readable. */
+.bg-emerald-600.text-white,
+.bg-amber-600.text-white,
+.bg-amber-700.text-white,
+.bg-sky-600.text-white,
+.bg-red-600.text-white,
+.bg-rose-600.text-white,
+.bg-black.text-white,
+.from-emerald-600.text-white,
+.from-teal-700.text-white,
+.from-red-600.text-white,
+.from-amber-600.text-white,
+.bg-\[\#1877F2\].text-white,
+.bg-\[\#25D366\].text-white,
+.bg-\[\#229ED9\].text-white{color:#FFFFFF !important}
+
+/* KEEP WHITE inside the deep-green banner surfaces the light
+   theme paints (the exact gradient combo restyled above —
+   the Big Deals banner and modal header bars using it). */
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .text-white{color:#FFFFFF !important}
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .hover\:text-white:hover{color:#FFFFFF !important}
+
+/* KEEP WHITE on hover where the hover background itself is a
+   solid colour (sky-700 share icon, emerald-600 hover links). */
+.hover\:bg-sky-700.hover\:text-white:hover{color:#FFFFFF !important}
+.hover\:bg-emerald-600.hover\:text-white:hover{color:#FFFFFF !important}
