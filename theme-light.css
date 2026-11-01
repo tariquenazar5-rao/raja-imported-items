@@ -1,0 +1,114 @@
+/* ============================================================
+   RAJA IMPORTED ITEMS — LIGHT THEME OVERRIDE (2026-11-01)
+   Loaded after the app bundle CSS. The app is built with
+   Tailwind v4: every zinc utility reads var(--color-zinc-*),
+   so redefining the palette flips the whole app (storefront
+   AND admin) to the light theme the owner approved:
+   ivory-cream background, white cards, dark warm text, gold
+   accents. Layout, card sizes and the mobile grid untouched.
+
+   *** RAINBOW OFFER ANIMATION — PRESERVED, DO NOT TOUCH ***
+   The bundle's offer animations live in the bundle CSS as:
+     .rainbow-text  { animation: 3s linear infinite rainbowText }
+     .rainbow-blink { border-width:2px; animation: 2.5s linear infinite rainbowGlow }
+     @keyframes rainbowText  (cycles `color`)
+     @keyframes rainbowGlow  (cycles `border-color` + `box-shadow`)
+   They are applied to the offer-banner cards and their badge
+   pills. NOTHING in this file references those classes or sets
+   `animation`, `border-color`, `box-shadow` or `color` on them,
+   so the offers keep cycling through rainbow colours exactly
+   as before. The gold store-name shimmer (.gold-shimmer /
+   @keyframes goldShine) is likewise untouched.
+   ============================================================ */
+
+:root{
+  --color-zinc-950:#FAF5EA; /* page background — ivory cream */
+  --color-zinc-900:#FFFFFF; /* cards & panels — white */
+  --color-zinc-800:#F1E9D7; /* chips & secondary surfaces — warm sand */
+  --color-zinc-700:#E4DABE; /* hover surfaces */
+  --color-zinc-600:#CBBB97;
+  --color-zinc-500:#8A7F68; /* muted text */
+  --color-zinc-400:#6E6450; /* secondary text */
+  --color-zinc-300:#4C4636; /* body text */
+  --color-zinc-200:#332E22;
+  --color-zinc-100:#211D14; /* headings */
+  --color-amber-400:#CE8A06; /* deeper gold so gold prices/labels read on white */
+  --color-amber-300:#B45309;
+}
+
+html{background:#FAF5EA}
+body{background:#FAF5EA !important}
+
+/* zinc-950 / zinc-600 / zinc-700 are also used as TEXT colours
+   (dark labels on gold buttons, dim captions). Those three text
+   utilities keep readable dark values; their background/border
+   siblings still use the light variables above. */
+.text-zinc-950{color:#221E17 !important}
+.text-zinc-600{color:#7A7263 !important}
+.text-zinc-700{color:#5D5647 !important}
+
+/* The bundle dims the cover photo with brightness-60 for the dark
+   theme — show the new light hero art at full brightness. */
+.brightness-60{filter:brightness(1.02) !important}
+
+/* Scrollbar to match the light theme */
+::-webkit-scrollbar-track{background:#F1E9D7 !important}
+::-webkit-scrollbar-thumb{background:#D8CBA6 !important}
+
+/* ---- BIG DEALS banner (the LARGE offer banner card): deep green
+   + gold, like the reference design. ONLY its background gradient
+   is restyled and its inner text kept light — the element's own
+   rainbow border/glow animation (above) keeps running, and the
+   badge pill on it keeps its rainbow text animation. ---- */
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900{
+  background-image:linear-gradient(100deg,#0A3A29 0%,#14532D 55%,#0D4A33 100%) !important;
+}
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .text-zinc-300{color:#DCE9DC !important}
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .text-zinc-400{color:#BCD2BE !important}
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .text-amber-300\/80{color:#F2C14E !important}
+.bg-gradient-to-r.from-zinc-900.via-amber-950\/40.to-zinc-900 .border-zinc-800\/80{border-color:rgba(242,193,78,.35) !important}
+
+/* ============================================================
+   INJECTED HOMEPAGE SECTIONS (homepage-sections.js)
+   Trust row · Top Categories · Top Products
+   ============================================================ */
+.rj-sec{max-width:80rem;margin:0 auto;padding:10px 12px 2px;font-family:inherit}
+.rj-trust-in{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;background:#FFFFFF;border:1px solid #EAE0C8;border-radius:18px;padding:14px 6px;box-shadow:0 6px 18px rgba(120,96,20,.06)}
+.rj-trust-it{text-align:center;padding:0 2px}
+.rj-ic{width:46px;height:46px;margin:0 auto 6px;border-radius:50%;background:#FBF2DA;display:flex;align-items:center;justify-content:center}
+.rj-ic svg{width:25px;height:25px}
+.rj-trust-it b{display:block;font-size:11.5px;line-height:1.25;color:#2A251B}
+.rj-trust-it span{display:block;font-size:9.5px;color:#8A7F68;margin-top:1px}
+.rj-head{display:flex;align-items:flex-end;justify-content:space-between;gap:10px;margin:18px 2px 10px}
+.rj-eyebrow{font-size:10px;letter-spacing:.14em;font-weight:800;color:#CE8A06;text-transform:uppercase}
+.rj-title{font-size:20px;font-weight:900;color:#241F16;line-height:1.15;margin-top:1px}
+.rj-sub{font-size:11.5px;color:#8A7F68;margin-top:1px}
+.rj-all{font-size:12px;font-weight:700;color:#241F16;cursor:pointer;white-space:nowrap;background:none;border:none;padding:0}
+.rj-cats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.rj-cat{background:#FFFFFF;border:1px solid #EAE0C8;border-radius:16px;overflow:hidden;cursor:pointer;box-shadow:0 4px 14px rgba(120,96,20,.05)}
+.rj-cat img{width:100%;aspect-ratio:16/10;object-fit:cover;background:#F6EFDD;display:block}
+.rj-cat-b{padding:8px 10px 10px}
+.rj-cat-b b{display:block;font-size:13px;line-height:1.25;color:#2A251B}
+.rj-cat-b span{font-size:10.5px;color:#8A7F68}
+.rj-prods{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px;scrollbar-width:none}
+.rj-prods::-webkit-scrollbar{display:none}
+.rj-card{flex:0 0 43%;scroll-snap-align:start;background:#FFFFFF;border:1px solid #EAE0C8;border-radius:16px;overflow:hidden;text-decoration:none;box-shadow:0 4px 14px rgba(120,96,20,.05)}
+.rj-card img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#F6EFDD;display:block}
+.rj-card-b{padding:9px 10px 11px}
+.rj-name{font-size:12.5px;font-weight:700;color:#2A251B;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:32px}
+.rj-flag{font-size:10px;color:#8A7F68;margin-top:2px}
+.rj-price{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px}
+.rj-sale{font-size:14.5px;font-weight:900;color:#B45309}
+.rj-orig{font-size:10.5px;color:#A2937A;text-decoration:line-through}
+.rj-off{font-size:9px;font-weight:900;background:#E11D48;color:#FFFFFF;padding:2px 6px;border-radius:999px}
+@media(min-width:640px){
+  .rj-trust-it b{font-size:13px}
+  .rj-trust-it span{font-size:11px}
+  .rj-ic{width:54px;height:54px}
+  .rj-cats{grid-template-columns:repeat(4,1fr)}
+  .rj-title{font-size:24px}
+}
+@media(min-width:768px){
+  .rj-prods{display:grid;grid-template-columns:repeat(4,1fr);overflow:visible}
+  .rj-card{flex:none}
+}
