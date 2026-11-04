@@ -39,14 +39,16 @@
       diamond: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linejoin="round"><path d="M7 3h10l4 6-9 12L3 9l4-6z"/><path d="M3 9h18"/><path d="M9.5 3L12 9l2.5-6"/></svg>',
       tag: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linejoin="round"><path d="M20.6 13.4L13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.3"/></svg>',
       headset: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><path d="M3 15a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4z"/><path d="M21 15a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1v-4z"/><path d="M19 20a3 3 0 0 1-3 2h-3"/></svg>',
-      returns: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.7-6.5"/><path d="M3 4v5h5"/></svg>'
+      returns: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 2.7-6.5"/><path d="M3 4v5h5"/></svg>',
+      care: '<svg viewBox="0 0 24 24" fill="none" stroke="#B8860B" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><path d="M3 15a1 1 0 0 1 1-1h1.2a1 1 0 0 1 1 1v3.2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V15z"/><path d="M21 15a1 1 0 0 0-1-1h-1.2a1 1 0 0 0-1 1v3.2a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V15z"/><path d="M19.8 19.2a3.6 3.6 0 0 1-3.6 2.8H13"/><path d="M10.5 22H13"/></svg>'
     };
 
     function trustHTML() {
       var items = [
         [IC.diamond, 'Best Quality', '100% Original'],
         [IC.tag, 'Best Price', 'Sab Se Kam Daam'],
-        [IC.headset, '24/7 Support', 'WhatsApp Par Rabta']
+        [IC.headset, '24/7 Support', 'WhatsApp Par Rabta'],
+        [IC.care, 'Best Customer Care Service', 'Behtareen Customer Care']
       ];
       var h = '<div class="rj-sec"><div class="rj-trust-in">';
       items.forEach(function (it) {
