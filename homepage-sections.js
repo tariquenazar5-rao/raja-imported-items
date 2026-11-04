@@ -10,10 +10,12 @@
     if ((params.get('view') || '').toLowerCase() === 'admin') return;
 
     var API = 'https://firestore.googleapis.com/v1/projects/raja-one-stop-shop/databases/(default)/documents/app-data/products?key=AIzaSyAbAGGJGTbEJc36dl29yiDMFKo_9aXuwXE';
+    var CATS_API = 'https://firestore.googleapis.com/v1/projects/raja-one-stop-shop/databases/(default)/documents/app-data/categories?key=AIzaSyAbAGGJGTbEJc36dl29yiDMFKo_9aXuwXE';
     var TOP_CODES = ['P185', 'P002', 'P006', 'P292', 'P005', 'P013', 'P301', 'P321'];
     var TOP_CATS = ['Electronics Gadgets', 'Beauty, Cosmetics & Personal Care', 'Hair Dryers & Styling', 'Bottles & Tumblers', 'Kitchen Appliances', 'Irons', 'Heaters', 'Personal Grooming'];
 
     var built = false, fetching = false;
+    var cachedProducts = null, cachedCats = null, ovlOpen = false;
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -92,6 +94,125 @@
       scrollToShop();
     }
 
+    /* ---- View All: ALL products --------------------------------------
+       The shop's own tab bar has an "All Products (N)" tab and, under
+       it, an "All Categories" filter pill (state ALL = no category
+       filter). Activate both the same way gotoCategory activates a
+       category pill, then scroll to the shop grid. */
+    function findBtn(match) {
+      var btns = document.querySelectorAll('button');
+      for (var i = 0; i < btns.length; i++) {
+        var t = (btns[i].textContent || '').trim();
+        if (match(t)) return btns[i];
+      }
+      return null;
+    }
+
+    function gotoAllProducts() {
+      try {
+        var tab = findBtn(function (t) { return t.indexOf('All Products') === 0; });
+        if (tab) tab.click();
+        setTimeout(function () {
+          try {
+            var pill = findBtn(function (t) { return t === 'All Categories'; });
+            if (pill) pill.click();
+            setTimeout(function () {
+              try {
+                var anchor = tab || pill;
+                var sec = anchor && anchor.closest ? anchor.closest('section') : null;
+                if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                else scrollToShop();
+              } catch (e) { scrollToShop(); }
+            }, 60);
+          } catch (e) { scrollToShop(); }
+        }, 120);
+      } catch (e) { scrollToShop(); }
+    }
+
+    /* ---- View All: ALL categories overlay ----------------------------
+       Category list = Firestore app-data/categories doc (in its own
+       order); counts are computed from the products array cached by
+       loadData. Tapping a category closes the overlay and reuses the
+       existing gotoCategory() navigation. */
+    function ensureOverlay() {
+      var ovl = document.getElementById('rj-cats-overlay');
+      if (ovl) return ovl;
+      ovl = document.createElement('div');
+      ovl.id = 'rj-cats-overlay';
+      ovl.className = 'rj-ovl';
+      ovl.innerHTML =
+        '<div class="rj-ovl-panel" role="dialog" aria-modal="true" aria-label="All Categories">' +
+          '<div class="rj-ovl-head"><div><div class="rj-eyebrow">Shop by Category</div>' +
+          '<div class="rj-title">All Categories</div>' +
+          '<div class="rj-sub" id="rj-ovl-sub"></div></div>' +
+          '<button class="rj-ovl-close" id="rj-ovl-close" type="button" aria-label="Close">\u00D7</button></div>' +
+          '<div class="rj-cats rj-ovl-grid" id="rj-ovl-grid"></div>' +
+        '</div>';
+      document.body.appendChild(ovl);
+      ovl.addEventListener('click', function (ev) { if (ev.target === ovl) closeAllCategories(); });
+      var cb = document.getElementById('rj-ovl-close');
+      if (cb) cb.addEventListener('click', closeAllCategories);
+      document.addEventListener('keydown', function (ev) {
+        if (ovlOpen && (ev.key === 'Escape' || ev.keyCode === 27)) closeAllCategories();
+      });
+      return ovl;
+    }
+
+    function openAllCategories() {
+      try {
+        var ovl = ensureOverlay();
+        ovl.classList.add('open');
+        ovlOpen = true;
+        try { document.body.style.overflow = 'hidden'; } catch (e) {}
+        if (cachedProducts && cachedCats) renderAllCats();
+        else {
+          var g = document.getElementById('rj-ovl-grid');
+          if (g) g.innerHTML = '<div class="rj-ovl-msg">Loading categories\u2026</div>';
+          loadData();
+        }
+      } catch (e) { /* leave the shop as it was */ }
+    }
+
+    function closeAllCategories() {
+      try {
+        var ovl = document.getElementById('rj-cats-overlay');
+        if (ovl) ovl.classList.remove('open');
+        ovlOpen = false;
+        try { document.body.style.overflow = ''; } catch (e) {}
+      } catch (e) {}
+    }
+
+    function renderAllCats() {
+      var grid = document.getElementById('rj-ovl-grid');
+      if (!grid || !cachedProducts) return;
+      var counts = {}, reps = {};
+      cachedProducts.forEach(function (p) {
+        var c = p.category || '';
+        counts[c] = (counts[c] || 0) + 1;
+        if (p.image && (!reps[c] || (p.stock || 0) > 0 && (reps[c].stock || 0) <= 0)) reps[c] = p;
+      });
+      var cats = (cachedCats || []).slice();
+      Object.keys(counts).forEach(function (c) { if (c && cats.indexOf(c) === -1) cats.push(c); });
+      var sub = document.getElementById('rj-ovl-sub');
+      if (sub) sub.textContent = cats.length + ' categories \u00B7 ' + cachedProducts.length + ' products';
+      var h = '';
+      cats.forEach(function (cat) {
+        var rep = reps[cat];
+        h += '<div class="rj-cat" data-cat="' + esc(cat) + '">' +
+          (rep && rep.image ? '<img src="' + esc(rep.image) + '" alt="' + esc(cat) + '" loading="lazy">' : '') +
+          '<div class="rj-cat-b"><b>' + esc(cat) + '</b><span>' + (counts[cat] || 0) + ' products</span></div></div>';
+      });
+      grid.innerHTML = h || '<div class="rj-ovl-msg">No categories found.</div>';
+      var cards = grid.querySelectorAll('.rj-cat');
+      for (var i = 0; i < cards.length; i++) {
+        cards[i].addEventListener('click', function () {
+          var name = this.getAttribute('data-cat');
+          closeAllCategories();
+          gotoCategory(name);
+        });
+      }
+    }
+
     function renderCats(products) {
       var row = document.getElementById('rj-cats-row');
       if (!row) return;
@@ -137,13 +258,32 @@
     function loadData() {
       if (fetching) return;
       fetching = true;
-      fetch(API).then(function (r) { return r.json(); }).then(function (d) {
-        var products = unwrap(d.fields.items) || [];
-        renderCats(products);
-        renderProds(products);
+      var pFetch = fetch(API).then(function (r) { return r.json(); }).then(function (d) {
+        cachedProducts = unwrap(d.fields.items) || [];
+      });
+      var cFetch = fetch(CATS_API).then(function (r) { return r.json(); }).then(function (d) {
+        cachedCats = unwrap(d.fields.items) || [];
+      }).catch(function () { cachedCats = null; });
+      Promise.all([pFetch, cFetch]).then(function () {
+        fetching = false;
+        if (!cachedCats || !cachedCats.length) {
+          var seen = {}, list = [];
+          (cachedProducts || []).forEach(function (p) {
+            if (p.category && !seen[p.category]) { seen[p.category] = 1; list.push(p.category); }
+          });
+          cachedCats = list;
+        }
+        renderCats(cachedProducts);
+        renderProds(cachedProducts);
+        if (ovlOpen) renderAllCats();
       }).catch(function () {
+        fetching = false;
         var c = document.getElementById('rj-cats-row'); if (c) c.style.display = 'none';
         var p = document.getElementById('rj-prods-row'); if (p) p.style.display = 'none';
+        if (ovlOpen) {
+          var g = document.getElementById('rj-ovl-grid');
+          if (g) g.innerHTML = '<div class="rj-ovl-msg">Could not load categories. Please try again.</div>';
+        }
       });
     }
 
@@ -159,8 +299,8 @@
       show.id = 'raja-showcase';
       show.innerHTML = showcaseHTML();
       a.deals.parentNode.insertBefore(show, a.deals.nextSibling);
-      var ca = document.getElementById('rj-cats-all'); if (ca) ca.addEventListener('click', scrollToShop);
-      var pa = document.getElementById('rj-prods-all'); if (pa) pa.addEventListener('click', scrollToShop);
+      var ca = document.getElementById('rj-cats-all'); if (ca) ca.addEventListener('click', openAllCategories);
+      var pa = document.getElementById('rj-prods-all'); if (pa) pa.addEventListener('click', gotoAllProducts);
       built = true;
       loadData();
       return true;
