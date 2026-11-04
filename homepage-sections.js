@@ -46,8 +46,7 @@
       var items = [
         [IC.diamond, 'Best Quality', '100% Original'],
         [IC.tag, 'Best Price', 'Sab Se Kam Daam'],
-        [IC.headset, '24/7 Support', 'WhatsApp Par Rabta'],
-        [IC.returns, 'Easy Returns', 'Asaan Wapsi']
+        [IC.headset, '24/7 Support', 'WhatsApp Par Rabta']
       ];
       var h = '<div class="rj-sec"><div class="rj-trust-in">';
       items.forEach(function (it) {
