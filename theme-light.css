@@ -166,3 +166,26 @@ body{background:#FAF5EA !important}
    solid colour (sky-700 share icon, emerald-600 hover links). */
 .hover\:bg-sky-700.hover\:text-white:hover{color:#FFFFFF !important}
 .hover\:bg-emerald-600.hover\:text-white:hover{color:#FFFFFF !important}
+
+/* ============================================================
+   VIEW ALL — ALL CATEGORIES OVERLAY (2026-11-04)
+   Opened by the Top Categories "View All" button
+   (homepage-sections.js: openAllCategories). Matches the
+   ivory/gold rj- family above; reuses .rj-cat card styling
+   for each category (name + product count). Phone-first:
+   full-screen sheet, 2-column grid, big tap targets.
+   ============================================================ */
+.rj-ovl{position:fixed;inset:0;z-index:9999;display:none;background:rgba(36,31,22,.55);padding:10px;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.rj-ovl.open{display:block}
+.rj-ovl-panel{max-width:56rem;margin:6px auto;background:#FAF5EA;border:1px solid #EAE0C8;border-radius:20px;box-shadow:0 18px 50px rgba(36,31,22,.35);overflow:hidden}
+.rj-ovl-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:14px 14px 10px;background:#FAF5EA;border-bottom:1px solid #EAE0C8;position:sticky;top:0;z-index:1}
+.rj-ovl-close{flex:0 0 auto;width:38px;height:38px;border-radius:50%;border:1px solid #E4DABE;background:#FFFFFF;color:#241F16;font-size:22px;line-height:1;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.rj-ovl-close:active{background:#FBF2DA}
+.rj-ovl-grid{padding:12px}
+.rj-ovl-msg{grid-column:1/-1;text-align:center;font-size:13px;color:#8A7F68;padding:22px 8px}
+@media(min-width:640px){
+  .rj-ovl-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(min-width:900px){
+  .rj-ovl-grid{grid-template-columns:repeat(4,1fr)}
+}
