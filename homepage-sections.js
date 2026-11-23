@@ -11,8 +11,8 @@
 
     var API = 'https://firestore.googleapis.com/v1/projects/raja-one-stop-shop/databases/(default)/documents/app-data/products?key=AIzaSyAbAGGJGTbEJc36dl29yiDMFKo_9aXuwXE';
     var CATS_API = 'https://firestore.googleapis.com/v1/projects/raja-one-stop-shop/databases/(default)/documents/app-data/categories?key=AIzaSyAbAGGJGTbEJc36dl29yiDMFKo_9aXuwXE';
-    var TOP_CODES = ['P185', 'P002', 'P006', 'P292', 'P005', 'P013', 'P301', 'P321'];
-    var TOP_CATS = ['Electronics Gadgets', 'Beauty, Cosmetics & Personal Care', 'Hair Dryers & Styling', 'Bottles & Tumblers', 'Kitchen Appliances', 'Irons', 'Heaters', 'Personal Grooming'];
+    var TOP_CODES = ['P444', 'P748', 'P185', 'P002', 'P006', 'P292', 'P005', 'P013', 'P301', 'P321'];
+    var TOP_CATS = ['Fragrance (Itr / Perfume)', 'Cufflinks', 'Electronics Gadgets', 'Beauty, Cosmetics & Personal Care', 'Hair Dryers & Styling', 'Bottles & Tumblers', 'Kitchen Appliances', 'Irons', 'Heaters', 'Personal Grooming'];
 
     var built = false, fetching = false;
     var cachedProducts = null, cachedCats = null, ovlOpen = false;
