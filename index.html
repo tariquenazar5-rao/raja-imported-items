@@ -31,7 +31,7 @@
     <meta property="og:url" content="https://tariquenazar5-rao.github.io/raja-imported-items/" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://tariquenazar5-rao.github.io/raja-imported-items/store-cover.png" />
-    <script type="module" crossorigin src="/raja-imported-items/assets/index-DIuG1jXg.js"></script>
+    <script type="module" crossorigin src="/raja-imported-items/assets/index-CqCFqVSL.js"></script>
     <link rel="stylesheet" crossorigin href="/raja-imported-items/assets/index-GUEkOcII.css">
     <link rel="stylesheet" href="/raja-imported-items/theme-light.css" />
     <script src="/raja-imported-items/homepage-sections.js" defer></script>
@@ -41,15 +41,23 @@
     <script>
       // Register Service Worker for PWA installation
       if ('serviceWorker' in navigator) {
+        // Was this page already controlled by a service worker when it
+        // loaded? Only then does a later controllerchange mean a NEW worker
+        // took over and the page should refresh onto the fresh bundle.
+        var hadController = !!navigator.serviceWorker.controller;
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('./sw.js')
             .then(function(reg) {
               console.log('PWA ServiceWorker registered with scope:', reg.scope);
               if (reg.update) { try { reg.update(); } catch (e) {} }
               setInterval(function() { try { reg.update(); } catch (e) {} }, 60 * 60 * 1000);
-              var reloaded = false;
               navigator.serviceWorker.addEventListener('controllerchange', function() {
-                if (!reloaded) { reloaded = true; window.location.reload(); }
+                if (!hadController) return;
+                try {
+                  if (sessionStorage.getItem('raja-sw-reloaded')) return;
+                  sessionStorage.setItem('raja-sw-reloaded', '1');
+                } catch (e) {}
+                window.location.reload();
               });
             })
             .catch(function(err) {
