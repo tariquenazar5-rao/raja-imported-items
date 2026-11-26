@@ -16,6 +16,7 @@
 
     var built = false, fetching = false;
     var cachedProducts = null, cachedCats = null, ovlOpen = false;
+    var hiddenCats = {};
 
     function esc(s) {
       return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -192,7 +193,7 @@
         counts[c] = (counts[c] || 0) + 1;
         if (p.image && (!reps[c] || (p.stock || 0) > 0 && (reps[c].stock || 0) <= 0)) reps[c] = p;
       });
-      var cats = (cachedCats || []).slice();
+      var cats = (cachedCats || []).slice().filter(function (c) { return !hiddenCats[c]; });
       Object.keys(counts).forEach(function (c) { if (c && cats.indexOf(c) === -1) cats.push(c); });
       var sub = document.getElementById('rj-ovl-sub');
       if (sub) sub.textContent = cats.length + ' categories \u00B7 ' + cachedProducts.length + ' products';
@@ -260,7 +261,20 @@
       if (fetching) return;
       fetching = true;
       var pFetch = fetch(API).then(function (r) { return r.json(); }).then(function (d) {
-        cachedProducts = unwrap(d.fields.items) || [];
+        var all = unwrap(d.fields.items) || [];
+        // Admin-only products (e.g. vape items) must NEVER surface on the
+        // customer homepage: drop them before any rendering or counting,
+        // and remember categories that exist only because of hidden
+        // products so the All Categories overlay skips those too.
+        var visCount = {}, hidCount = {};
+        all.forEach(function (p) {
+          var c = p.category || '';
+          if (p.adminOnly === true) hidCount[c] = (hidCount[c] || 0) + 1;
+          else visCount[c] = (visCount[c] || 0) + 1;
+        });
+        hiddenCats = {};
+        Object.keys(hidCount).forEach(function (c) { if (!visCount[c]) hiddenCats[c] = 1; });
+        cachedProducts = all.filter(function (p) { return p.adminOnly !== true; });
       });
       var cFetch = fetch(CATS_API).then(function (r) { return r.json(); }).then(function (d) {
         cachedCats = unwrap(d.fields.items) || [];
