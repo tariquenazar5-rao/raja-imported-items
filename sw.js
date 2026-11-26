@@ -1,5 +1,5 @@
 // Service Worker for Raja One Stop Shop PWA
-const CACHE_NAME = 'raja-store-pwa-202611252000';
+const CACHE_NAME = 'raja-store-pwa-202611261252';
 const BASE = '/raja-imported-items';
 const PRECACHE_ASSETS = [
   BASE + '/',
